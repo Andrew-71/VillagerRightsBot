@@ -67,11 +67,9 @@ class JavaServerStats(commands.Cog):
             ).set_footer(text="Note: the bot only tracks stats since the server has been whitelisted"
                          ).add_field(name="Time played", value=str(timedelta(seconds=user_dict['time_played']))
                                      ).add_field(name="Joined on", value=f"<t:{user_dict['since']}>")
-        try:
-            # Shows player skin's head.
-            player_stats_embed.set_thumbnail(url=f"https://crafatar.com/avatars/{user_dict['uuid']}")
-        except:
-            pass
+        # Shows player skin's head.
+        player_stats_embed.set_thumbnail(url=f"https://crafatar.com/avatars/{user_dict['uuid']}")
+
         await interaction.response.send_message(
             embed=player_stats_embed,
             ephemeral=True
