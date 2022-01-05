@@ -5,6 +5,7 @@ import nextcord
 from nextcord.ext import tasks, commands
 from pathlib import Path
 from toml import load
+from typing import Union
 from utils.common_embeds import make_error_embed
 from utils.java_stats_utils import make_status_embed, update_stats, update_whitelist
 from utils.json_handling import write_to_json
@@ -53,7 +54,18 @@ class JavaServerStats(commands.Cog):
         name="Java Server Stats",
         guild_ids=[CONFIG["IDS"]["GUILD"]]
     )
-    async def get_java_stats(self, interaction: nextcord.Interaction, user: nextcord.User):
+    async def java_user_stats(self, interaction: nextcord.Interaction, user: nextcord.User):
+        await self.get_java_stats(interaction, user)
+
+    @nextcord.slash_command(
+        name="stats",
+        description="Gets a user's stats for the Java Server",
+        guild_ids=[CONFIG["IDS"]["GUILD"]]
+    )
+    async def java_slash_stats(self, interaction: nextcord.Interaction, member: nextcord.Member):
+        await self.get_java_stats(interaction, member)
+
+    async def get_java_stats(self, interaction: nextcord.Interaction, user: Union[nextcord.User, nextcord.Member]):
         if (user_id := str(user.id)) not in w.WHITELIST_DICT:
             await interaction.response.send_message(
                 embed=make_error_embed("This player is not whitelisted on the Java Server!"),
@@ -74,6 +86,7 @@ class JavaServerStats(commands.Cog):
             embed=player_stats_embed,
             ephemeral=True
         )
+
 
     @commands.Cog.listener()
     async def on_ready(self):
