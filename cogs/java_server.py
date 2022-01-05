@@ -8,6 +8,7 @@ from toml import load
 from utils.common_embeds import make_error_embed
 from utils.java_stats_utils import make_status_embed, update_stats, update_whitelist
 from utils.json_handling import write_to_json
+import datetime
 
 
 CONFIG: dict = load(Path('configs/config.toml'))
@@ -32,6 +33,10 @@ async def check_java(status_channel: nextcord.TextChannel):
         write_to_json(w.WHITELIST_DICT, "data/stats.json")
         status_embed.colour = nextcord.Colour.blue()
 
+    # Since we often edit the message, this helps players know the relevance of info
+    status_embed.timestamp = datetime.datetime.now()
+
+    # Try to edit old message. If there isn't one, send new message.
     history = await status_channel.history().flatten()
     if history:
         await history[0].edit(embed=status_embed)
@@ -56,13 +61,19 @@ class JavaServerStats(commands.Cog):
             )
             return
         user_dict = w.WHITELIST_DICT[user_id]
-        await interaction.response.send_message(
-            embed=nextcord.Embed(
+        player_stats_embed = nextcord.Embed(
                 title=f"{user_dict['username']}'s Stats",
                 colour=nextcord.Colour.gold(),
             ).set_footer(text="Note: the bot only tracks stats since the server has been whitelisted"
                          ).add_field(name="Time played", value=str(timedelta(seconds=user_dict['time_played']))
-                                     ).add_field(name="Joined on", value=f"<t:{user_dict['since']}>"),
+                                     ).add_field(name="Joined on", value=f"<t:{user_dict['since']}>")
+        try:
+            # Shows player skin's head.
+            player_stats_embed.set_thumbnail(url=f"https://crafatar.com/avatars/{user_dict['uuid']}")
+        except:
+            pass
+        await interaction.response.send_message(
+            embed=player_stats_embed,
             ephemeral=True
         )
 
