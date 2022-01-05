@@ -14,7 +14,6 @@ class VillagerRightsBot(nextcord.Client):
     def __init__(self, config: dict):
         self.config = config
         super().__init__(intents=nextcord.Intents.all())
-        self.JAVA_SERVER: MinecraftServer = MinecraftServer.lookup(f"{config['HOSTNAME']}:{config['QUERY_PORT']}")
         self.current_players: list[tuple[str, int]] = []
 
     def load_ids(self):
