@@ -1,0 +1,35 @@
+# Enter the token for the discord bot below, (between the quotes)
+TOKEN=""
+
+# Domain name or IP for the Java Server
+# Example: HOSTNAME="google.com" or "127.0.0.1"
+# Default: "villagerrights.xyz"
+HOSTNAME="127.0.0.1"
+
+# Query port for the Java Server, found in server.properties
+# Default: 25565
+QUERY_PORT=25565
+
+# Open TCP port for the Java Server, found in "Add ports" setting in Pebblehost
+TCP_PORT=6969
+
+[IDS]
+    # Role ID for new users
+    # Default: 742825059697164318
+    ACTIVIST_ROLE=925421679583322119
+
+    # ID for the java server status
+    # Default: 770638692901060608
+    STATUS_CHANNEL=925421680719986799
+
+    # ID for the verification channel
+    # Default: 742825433887801465
+    VERIFICATION_CHANNEL=925421680975806493
+
+    # ID for the guild (server)
+    # Default: 712477764510547969
+    GUILD=925421679583322112
+
+    # ID for the mod log channel
+    # Default: 712488537932431392
+    MOD_LOG=925421680975806486
