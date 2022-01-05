@@ -18,17 +18,17 @@ JAVA_SERVER: MinecraftServer = MinecraftServer.lookup(f"{CONFIG['HOSTNAME']}:{CO
 async def check_java(status_channel: nextcord.TextChannel):
 
     try:
-        a = JAVA_SERVER.query()
-        b = a.players.names
+        query_response = JAVA_SERVER.query()
+        player_names = query_response.players.names
     except ConnectionResetError:
         status_embed = nextcord.Embed(
             title="Server is Offline",
             colour=nextcord.Colour.red()
         )
     else:
-        status_embed = make_status_embed(players=b)
-        await update_whitelist(players=b)
-        update_stats(players=b)
+        status_embed = make_status_embed(players=player_names)
+        await update_whitelist(players=player_names)
+        update_stats(players=player_names)
         write_to_json(w.WHITELIST_DICT, "data/stats.json")
         status_embed.colour = nextcord.Colour.blue()
 
