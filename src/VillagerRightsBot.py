@@ -26,30 +26,20 @@ class VillagerRightsBot(nextcord.Client):
     async def check_verification_channel(self):
 
         history = await verification_channel.history().flatten()
-        for message in history:
-            if message.author == self.user:
-                await message.edit(
-                    embed=nextcord.Embed(
+        embed = nextcord.Embed(
                         title="Welcome!",
                         description="Welcome to the official Villager Rights Discord server!\n"
                                     "Please verify yourself by **clicking the button below** and answering the"
                                     " random captcha using **/answer {solution}**\n"
                                     "*This helps with preventing illegitimate accounts from joining our server*"
-                    ).set_footer(text="Hint: There are no zeroes in the images"),
-                    view=VerificationView(bot=self)
-                )
+                    ).set_footer(text="Hint: There are no zeroes in the images")
+        view = VerificationView(bot=self)
+        for message in history:
+            if message.author == self.user:
+                await message.edit(embed=embed, view=view)
                 break
         else:
-            await verification_channel.send(
-                embed=nextcord.Embed(
-                    title="Welcome!",
-                    description="Welcome to the official Villager Rights Discord server!\n"
-                                "Please verify yourself by **clicking the button below** and answering the"
-                                " random captcha using **/answer {solution}**\n"
-                                "*This helps with preventing illegitimate accounts from joining our server*"
-                ).set_footer(text="Hint: There are no zeroes in the images"),
-                view=VerificationView(bot=self)
-            )
+            await verification_channel.send(embed=embed, view=view)
 
     async def on_ready(self):
         print(nextcord.__version__)
