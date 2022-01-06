@@ -3,7 +3,6 @@ from nextcord.ext import commands
 from pathlib import Path
 from toml import load
 from typing import Optional
-from utils.slash_commands import has_permissions
 
 CONFIG = load(Path("configs/config.toml"))
 
