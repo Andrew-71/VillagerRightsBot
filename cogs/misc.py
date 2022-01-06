@@ -22,10 +22,12 @@ class Miscellaneous(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.activist_role: Optional[nextcord.Role] = None
+        self.java_role: Optional[nextcord.Role] = None
 
     @commands.Cog.listener()
     async def on_ready(self):
         self.activist_role = self.bot.get_role(CONFIG["IDS"]["ACTIVIST_ROLE"])
+        self.java_role = self.bot.get_role(CONFIG["IDS"]["JAVA_ROLE"])
 
     @nextcord.slash_command(
         name="declaration",
@@ -48,3 +50,14 @@ class Miscellaneous(commands.Cog):
         for member in interaction.guild.members:
             if not member.bot:
                 await member.add_roles(self.activist_role)
+
+    @nextcord.slash_command(
+        name="remove_java_role",
+        description="Remove java server role from all players",
+        guild_ids=[CONFIG["IDS"]["GUILD"]]
+    )
+    @has_permissions(manage_guild=True)
+    async def add_activist_role(self, interaction: nextcord.Interaction):
+        for member in interaction.guild.members:
+            if not member.bot and self.java_role in member.roles:
+                await member.remove_roles(self.java_role)
