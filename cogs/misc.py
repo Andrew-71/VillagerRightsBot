@@ -49,7 +49,7 @@ class Miscellaneous(commands.Cog):
     @has_permissions(manage_guild=True)
     async def add_activist_role(self, interaction: nextcord.Interaction):
         for member in interaction.guild.members:
-            if not member.bot:
+            if not member.bot and self.activist_role not in member.roles:
                 await member.add_roles(self.activist_role)
 
         await interaction.response.send_message("success", ephemeral=True)
