@@ -24,12 +24,6 @@ class Miscellaneous(commands.Cog):
         self.activist_role: Optional[nextcord.Role] = None
         self.java_role: Optional[nextcord.Role] = None
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        guild = self.bot.get_guild(CONFIG["IDS"]["GUILD"])
-        self.activist_role = guild.get_role(CONFIG["IDS"]["ACTIVIST_ROLE"])
-        self.java_role = guild.get_role(CONFIG["IDS"]["JAVA_ROLE"])
-
     @nextcord.slash_command(
         name="declaration",
         description="Declaration on the Rights of the Villager",
@@ -40,29 +34,3 @@ class Miscellaneous(commands.Cog):
             content="_ _",
             view=DeclarationURL()
         )
-
-    @nextcord.slash_command(
-        name="add_activist_role",
-        description="Add the activist role for all allowed users",
-        guild_ids=[CONFIG["IDS"]["GUILD"]]
-    )
-    @has_permissions(manage_guild=True)
-    async def add_activist_role(self, interaction: nextcord.Interaction):
-        for member in interaction.guild.members:
-            if not member.bot and self.activist_role not in member.roles:
-                await member.add_roles(self.activist_role)
-
-        await interaction.response.send_message("success", ephemeral=True)
-
-    @nextcord.slash_command(
-        name="remove_java_role",
-        description="Remove java server role from all players",
-        guild_ids=[CONFIG["IDS"]["GUILD"]]
-    )
-    @has_permissions(manage_guild=True)
-    async def remove_java_role(self, interaction: nextcord.Interaction):
-        for member in interaction.guild.members:
-            if not member.bot and self.java_role in member.roles:
-                await member.remove_roles(self.java_role)
-
-        await interaction.response.send_message("success", ephemeral=True)
