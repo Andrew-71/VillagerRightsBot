@@ -3,6 +3,7 @@ from nextcord.ext import commands
 from pathlib import Path
 from toml import load
 from typing import Optional
+from utils.slash_commands import has_permissions
 
 CONFIG = load(Path("configs/config.toml"))
 
@@ -42,6 +43,7 @@ class Miscellaneous(commands.Cog):
         description="Add the activist role for all allowed users",
         guild_ids=[CONFIG["IDS"]["GUILD"]]
     )
+    @has_permissions(manage_guild=True)
     async def add_activist_role(self, interaction: nextcord.Interaction):
         for member in interaction.guild.members:
             if not member.bot:
