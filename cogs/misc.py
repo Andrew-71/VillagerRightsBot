@@ -51,6 +51,8 @@ class Miscellaneous(commands.Cog):
             if not member.bot:
                 await member.add_roles(self.activist_role)
 
+        await interaction.response.send_message("success", ephemeral=True)
+
     @nextcord.slash_command(
         name="remove_java_role",
         description="Remove java server role from all players",
@@ -61,3 +63,5 @@ class Miscellaneous(commands.Cog):
         for member in interaction.guild.members:
             if not member.bot and self.java_role in member.roles:
                 await member.remove_roles(self.java_role)
+
+        await interaction.response.send_message("success", ephemeral=True)
