@@ -1,5 +1,5 @@
 import cogs.whitelisting as w
-from datetime import timedelta
+from datetime import timedelta, datetime
 from mcstatus import MinecraftServer
 import nextcord
 from nextcord.ext import tasks, commands
@@ -9,7 +9,6 @@ from typing import Union
 from utils.common_embeds import make_error_embed
 from utils.java_stats_utils import make_status_embed, update_stats, update_whitelist
 from utils.json_handling import write_to_json
-import datetime
 
 
 CONFIG: dict = load(Path('configs/config.toml'))
@@ -35,7 +34,7 @@ async def check_java(status_channel: nextcord.TextChannel):
         status_embed.colour = nextcord.Colour.blue()
 
     # Since we often edit the message, this helps players know the relevance of info
-    status_embed.timestamp = datetime.datetime.now()
+    status_embed.timestamp = datetime.now()
 
     # Try to edit old message. If there isn't one, send new message.
     history = await status_channel.history().flatten()
