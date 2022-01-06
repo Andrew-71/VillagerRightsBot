@@ -4,6 +4,7 @@ from nextcord.ext import commands
 from pathlib import Path
 from time import time
 from toml import load
+from typing import Optional
 from utils.common_embeds import make_error_embed, make_success_embed
 from utils.json_handling import read_from_json, write_to_json
 from utils.whitelist_utils import can_specify_member, read_and_write, get_uuid, UUIDException, ConnectionException
@@ -16,6 +17,13 @@ class Whitelisting(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.activist_role: Optional[nextcord.Role] = None
+        self.java_role: Optional[nextcord.Role] = None
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.activist_role = self.bot.get_role(CONFIG["IDS"]["ACTIVIST_ROLE"])
+        self.java_role = self.bot.get_role(CONFIG["IDS"]["JAVA_ROLE"])
 
     @nextcord.slash_command(
         name="whitelist",
@@ -55,12 +63,15 @@ class Whitelisting(commands.Cog):
             "time_played": 0
         }
         write_to_json(WHITELIST_DICT, "data/stats.json")
+        await interaction.user.add_roles(self.java_role)
         await interaction.response.send_message(
             embed=make_success_embed("Whitelist add was successful, welcome!"
                                      ).insert_field_at(0, name="UUID", value=user_id
                                                        ).insert_field_at(0, name="Username", value=username),
             ephemeral=True
         )
+
+
 
     @whitelist.subcommand(
         name="remove",
@@ -88,6 +99,7 @@ class Whitelisting(commands.Cog):
 
         del WHITELIST_DICT[member_id]
         write_to_json(WHITELIST_DICT, "data/stats.json")
+        await interaction.user.remove_roles(self.java_role)
         await interaction.response.send_message(
             embed=make_success_embed("Whitelist removal was successful"),
             ephemeral=True
