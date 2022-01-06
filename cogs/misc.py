@@ -57,7 +57,7 @@ class Miscellaneous(commands.Cog):
         guild_ids=[CONFIG["IDS"]["GUILD"]]
     )
     @has_permissions(manage_guild=True)
-    async def add_activist_role(self, interaction: nextcord.Interaction):
+    async def remove_java_role(self, interaction: nextcord.Interaction):
         for member in interaction.guild.members:
             if not member.bot and self.java_role in member.roles:
                 await member.remove_roles(self.java_role)
