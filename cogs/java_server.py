@@ -86,7 +86,6 @@ class JavaServerStats(commands.Cog):
             ephemeral=True
         )
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         status_channel = self.bot.get_channel(CONFIG["IDS"]["STATUS_CHANNEL"])

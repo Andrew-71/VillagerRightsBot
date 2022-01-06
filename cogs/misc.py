@@ -26,8 +26,9 @@ class Miscellaneous(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.activist_role = self.bot.get_role(CONFIG["IDS"]["ACTIVIST_ROLE"])
-        self.java_role = self.bot.get_role(CONFIG["IDS"]["JAVA_ROLE"])
+        guild = self.bot.get_guild(CONFIG["IDS"]["GUILD"])
+        self.activist_role = guild.get_role(CONFIG["IDS"]["ACTIVIST_ROLE"])
+        self.java_role = guild.get_role(CONFIG["IDS"]["JAVA_ROLE"])
 
     @nextcord.slash_command(
         name="declaration",
