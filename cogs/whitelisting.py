@@ -46,7 +46,8 @@ class Whitelisting(commands.Cog):
     )):
         if str(interaction.user.id if not member else member.id) in WHITELIST_DICT.keys():
             await interaction.response.send_message(
-                embed=make_error_embed("You are already whitelisted on the server!")
+                embed=make_error_embed("You are already whitelisted on the server!"),
+                ephemeral=True
             )
             return
         try:
