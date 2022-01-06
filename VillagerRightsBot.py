@@ -3,7 +3,6 @@ from cogs.misc import Miscellaneous
 from cogs.moderation import Moderation
 from cogs.verification import VerificationView, Verification
 from cogs.whitelisting import Whitelisting
-from mcstatus import MinecraftServer
 import nextcord
 from pathlib import Path
 from toml import load
