@@ -31,7 +31,7 @@ def can_specify_member(func):
 
     @wraps(func)
     async def wrapper(*args, **kwargs):
-        if args[-1] and not args[1].user.guild_permissions.manage_roles:
+        if kwargs["member"] and not args[1].user.guild_permissions.manage_roles:
             await args[1].response.send_message(
                 embed=make_error_embed("You do not have permissions to manage other members"),
                 ephemeral=True
