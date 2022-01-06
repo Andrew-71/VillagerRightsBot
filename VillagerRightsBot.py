@@ -4,15 +4,16 @@ from cogs.moderation import Moderation
 from cogs.verification import VerificationView, Verification
 from cogs.whitelisting import Whitelisting
 import nextcord
+from nextcord.ext import commands
 from pathlib import Path
 from toml import load
 
 
-class VillagerRightsBot(nextcord.Client):
+class VillagerRightsBot(commands.Bot):
 
     def __init__(self, config: dict):
         self.config = config
-        super().__init__(intents=nextcord.Intents.all())
+        super().__init__(command_prefix="!", intents=nextcord.Intents.all())
         self.current_players: list[tuple[str, int]] = []
 
     def load_ids(self):
