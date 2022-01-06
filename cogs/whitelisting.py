@@ -71,8 +71,6 @@ class Whitelisting(commands.Cog):
             ephemeral=True
         )
 
-
-
     @whitelist.subcommand(
         name="remove",
         description="Remove your account from the whitelist"
