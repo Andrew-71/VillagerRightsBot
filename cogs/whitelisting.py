@@ -52,6 +52,7 @@ class Whitelisting(commands.Cog):
             return
         try:
             user_id = await get_uuid(user=Player(username), interaction=interaction)
+            await read_and_write({"method": 0, "uuid": user_id, "name": username})
         except UUIDException:
             return
         except ConnectionException:
