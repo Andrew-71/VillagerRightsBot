@@ -86,6 +86,39 @@ class JavaServerStats(commands.Cog):
             ephemeral=True
         )
 
+    @nextcord.slash_command(
+        name="leaderboard",
+        description="Top 10 java players by time online",
+        guild_ids=[CONFIG["IDS"]["GUILD"]]
+    )
+    async def java_leaderboard(self, interaction: nextcord.Interaction):
+        leaderboard_embed = nextcord.Embed(title='Leaderboard', description='Ranked by time played',
+                                           colour=nextcord.Colour.dark_blue())
+
+        # Create list of players and their time.
+        player_times = []
+        for i in w.WHITELIST_DICT:
+            player_dict = w.WHITELIST_DICT[i]
+            player_times.append([player_dict['username'], int(player_dict['time_played'])])
+
+        # We only display top 10 to not make the embed overly long.
+        for i, user in zip(range(1, 11), sorted(player_times, key=lambda x: x[1])):
+            leaderboard_embed.add_field(name=f'{i}. {user[0]}',
+                                        value=str(timedelta(seconds=user[1])))
+
+        # If user is a player and is outside the top 10 we add them at the bottom with their rank.
+        member_id = str(interaction.user.id)
+        try:
+            user_dict = w.WHITELIST_DICT[member_id]
+            rank = list(map(lambda x: x[0], sorted(player_times, key=lambda x: x[1]))).index(user_dict['username'])
+            if rank > 9:
+                leaderboard_embed.add_field(name=f'...\n{str(rank + 1)}. {user_dict["username"]}',
+                                            value=str(timedelta(seconds=user_dict['time_played'])))
+        except KeyError:
+            pass
+
+        await interaction.response.send_message(embed=leaderboard_embed, ephemeral=True)  # Send the leaderboard
+
     @commands.Cog.listener()
     async def on_ready(self):
         status_channel = self.bot.get_channel(CONFIG["IDS"]["STATUS_CHANNEL"])
