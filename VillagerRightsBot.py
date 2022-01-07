@@ -46,7 +46,7 @@ class VillagerRightsBot(commands.Bot):
         self.load_ids()
         await self.check_verification_channel()
         await self.change_presence(
-            activity=nextcord.CustomActivity(name="Use /whitelist add  to join the Java Server!"),
+            activity=nextcord.Game(name="Use /whitelist add  to join the Java Server!"),
             status=nextcord.Status.online
         )
 
