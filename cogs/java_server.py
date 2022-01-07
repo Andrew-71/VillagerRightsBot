@@ -103,7 +103,7 @@ class JavaServerStats(commands.Cog):
 
         sorted_player_times = dict(sorted(player_times.items(), key=lambda item: item[1]))
         # We only display top 10 to not make the embed overly long.
-        for i, user in enumerate(islice(sorted_player_times.values(), 10)):
+        for i, user in enumerate(islice(sorted_player_times.items(), 10)):
             leaderboard_embed.add_field(name=f'{i + 1}. {user[0]}',
                                         value=str(timedelta(seconds=user[1])))
 
