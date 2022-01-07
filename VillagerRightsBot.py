@@ -45,6 +45,10 @@ class VillagerRightsBot(commands.Bot):
         print("ready")
         self.load_ids()
         await self.check_verification_channel()
+        await self.change_presence(
+            activity=nextcord.CustomActivity(name="Use /whitelist add  to join the Java Server!"),
+            status=nextcord.Status.online
+        )
 
     async def on_message(self, message: nextcord.Message):
         if message.author == self.user or message.flags.ephemeral:
