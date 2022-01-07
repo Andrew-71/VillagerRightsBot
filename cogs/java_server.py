@@ -101,7 +101,7 @@ class JavaServerStats(commands.Cog):
         for player_dict in w.WHITELIST_DICT.values():
             player_times[player_dict['username']] = player_dict['time_played']
 
-        sorted_player_times = dict(sorted(player_times.items(), key=lambda item: item[1]))
+        sorted_player_times = dict(sorted(player_times.items(), key=lambda item: item[1], reverse=True))
         # We only display top 10 to not make the embed overly long.
         for i, user in enumerate(islice(sorted_player_times.items(), 10)):
             leaderboard_embed.add_field(name=f'{i + 1}. {user[0]}',
