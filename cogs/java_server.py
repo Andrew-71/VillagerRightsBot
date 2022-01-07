@@ -1,5 +1,6 @@
 import cogs.whitelisting as w
 from datetime import timedelta, datetime
+from itertools import islice
 from mcstatus import MinecraftServer
 import nextcord
 from nextcord.ext import tasks, commands
@@ -95,22 +96,22 @@ class JavaServerStats(commands.Cog):
         leaderboard_embed = nextcord.Embed(title='Leaderboard', description='Ranked by time played',
                                            colour=nextcord.Colour.dark_blue())
 
-        # Create list of players and their time.
-        player_times = []
-        for i in w.WHITELIST_DICT:
-            player_dict = w.WHITELIST_DICT[i]
-            player_times.append([player_dict['username'], int(player_dict['time_played'])])
+        # Create dictionary of players and their time played on the server.
+        player_times = {}
+        for player_dict in w.WHITELIST_DICT.values():
+            player_times[player_dict['username']] = player_dict['time_played']
 
+        sorted_player_times = dict(sorted(player_times.items(), key=lambda item: item[1]))
         # We only display top 10 to not make the embed overly long.
-        for i, user in zip(range(1, 11), sorted(player_times, key=lambda x: x[1])):
-            leaderboard_embed.add_field(name=f'{i}. {user[0]}',
+        for i, user in enumerate(islice(sorted_player_times.values(), 10)):
+            leaderboard_embed.add_field(name=f'{i + 1}. {user[0]}',
                                         value=str(timedelta(seconds=user[1])))
 
         # If user is a player and is outside the top 10 we add them at the bottom with their rank.
         member_id = str(interaction.user.id)
         try:
             user_dict = w.WHITELIST_DICT[member_id]
-            rank = list(map(lambda x: x[0], sorted(player_times, key=lambda x: x[1]))).index(user_dict['username'])
+            rank = list(sorted_player_times).index(user_dict["username"])
             if rank > 9:
                 leaderboard_embed.add_field(name=f'...\n{str(rank + 1)}. {user_dict["username"]}',
                                             value=str(timedelta(seconds=user_dict['time_played'])))
