@@ -7,6 +7,7 @@ from pathlib import Path
 from random import randint
 from toml import load
 from utils.common_embeds import make_error_embed, make_success_embed
+from utils.slash_commands import has_permissions
 
 
 CONFIG = load(Path('configs/config.toml'))
@@ -97,3 +98,22 @@ class Verification(commands.Cog):
             ).set_footer(text="Sorry about that, if this keeps occurring please DM the owner")
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @nextcord.slash_command(
+        name="verication_message",
+        description="Temporary command for owner only",
+        guild_ids=[GUILD_ID]
+    )
+    @has_permissions(manage_guild=True)
+    async def verification_message(self, interaction: nextcord.Interaction):
+        await interaction.response.send_message(
+            embed=nextcord.Embed(
+                title="Welcome!",
+                description="Welcome to the official Villager Rights Discord server!\n"
+                            "Please verify yourself by **clicking the button below** "
+                            "and answering the random captcha using **/answer {solution}**"
+                            "*This helps with preventing illegitimate accounts from joining our server*"
+            ).set_footer(text="Hint: There are no zeroes in the images"),
+            view=VerificationView(bot=self.bot)
+        )
+
