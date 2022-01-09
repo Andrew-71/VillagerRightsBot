@@ -41,7 +41,7 @@ conversations: list[VerificationConversation] = []
 
 class VerificationView(nextcord.ui.View):
     def __init__(self, bot):
-        super().__init__()
+        super().__init__(timeout=None)
         self.bot = bot
 
     @nextcord.ui.button(label="Verify here!", style=nextcord.ButtonStyle.green, custom_id="villagerrightsbot:verify")
