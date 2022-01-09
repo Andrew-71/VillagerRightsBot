@@ -44,7 +44,7 @@ class VerificationView(nextcord.ui.View):
         super().__init__()
         self.bot = bot
 
-    @nextcord.ui.button(label="Verify here!", style=nextcord.ButtonStyle.green)
+    @nextcord.ui.button(label="Verify here!", style=nextcord.ButtonStyle.green, custom_id="villagerrightsbot:verify")
     async def verify(self, _, interaction: nextcord.Interaction):
         async with interaction.channel.typing():
             solution, file = generate_image()
