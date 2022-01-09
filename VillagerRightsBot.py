@@ -7,6 +7,7 @@ import nextcord
 from nextcord.ext import commands
 from pathlib import Path
 from toml import load
+from typing import Optional
 
 
 class VillagerRightsBot(commands.Bot):
@@ -16,12 +17,11 @@ class VillagerRightsBot(commands.Bot):
         super().__init__(command_prefix="!", intents=nextcord.Intents.all())
         self.current_players: list[tuple[str, int]] = []
         self.persistent_views_added: bool = False
+        self.verification_channel: Optional[nextcord.TextChannel] = None
 
     def load_ids(self):
-        global villager_rights
-        global verification_channel
         villager_rights = self.get_guild(self.config["IDS"]["GUILD"])
-        verification_channel = villager_rights.get_channel(self.config["IDS"]["VERIFICATION_CHANNEL"])
+        self.verification_channel = villager_rights.get_channel(self.config["IDS"]["VERIFICATION_CHANNEL"])
 
     async def on_ready(self):
         print(nextcord.__version__)
@@ -38,12 +38,12 @@ class VillagerRightsBot(commands.Bot):
     async def on_message(self, message: nextcord.Message):
         if message.author == self.user or message.flags.ephemeral:
             return
-        if message.channel == verification_channel:
+        if message.channel == self.verification_channel:
             await message.delete()
 
     async def on_member_join(self, member: nextcord.Member):
         if not member.bot:
-            await verification_channel.send(content=member.mention, delete_after=0.1)
+            await self.verification_channel.send(content=member.mention, delete_after=0.1)
 
 
 def main():
