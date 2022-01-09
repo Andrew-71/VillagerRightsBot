@@ -97,9 +97,10 @@ class JavaServerStats(commands.Cog):
                                            colour=nextcord.Colour.dark_blue())
 
         # Create dictionary of players and their time played on the server.
-        player_times = {}
-        for player_dict in w.WHITELIST_DICT.values():
-            player_times[player_dict['username']] = player_dict['time_played']
+        player_times = {
+            player_dict['username']: player_dict['time_played']
+            for player_dict in w.WHITELIST_DICT.values()
+        }
 
         sorted_player_times = dict(sorted(player_times.items(), key=lambda item: item[1], reverse=True))
         # We only display top 10 to not make the embed overly long.
@@ -113,8 +114,11 @@ class JavaServerStats(commands.Cog):
             user_dict = w.WHITELIST_DICT[member_id]
             rank = list(sorted_player_times).index(user_dict["username"])
             if rank > 9:
-                leaderboard_embed.add_field(name=f'...\n{str(rank + 1)}. {user_dict["username"]}',
-                                            value=str(timedelta(seconds=user_dict['time_played'])))
+                leaderboard_embed.add_field(
+                    name=f'...\n{rank + 1}. {user_dict["username"]}',
+                    value=str(timedelta(seconds=user_dict['time_played'])),
+                )
+
         except KeyError:
             pass
 
