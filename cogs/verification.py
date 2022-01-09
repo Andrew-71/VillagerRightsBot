@@ -91,7 +91,9 @@ class Verification(commands.Cog):
                 break
         else:
             embed = make_error_embed(
-                "There was an error with the bot, please dismiss this message then hit the button again"
+                "Did you already click the button?\n"
+                "If you did, then there was an error with the bot, "
+                "please dismiss this message then hit the button again."
             ).set_footer(text="Sorry about that, if this keeps occurring please DM the owner")
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
