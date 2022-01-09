@@ -111,7 +111,7 @@ class Verification(commands.Cog):
                 title="Welcome!",
                 description="Welcome to the official Villager Rights Discord server!\n"
                             "Please verify yourself by **clicking the button below** "
-                            "and answering the random captcha using **/answer {solution}**"
+                            "and answering the random captcha using **/answer {solution}**\n"
                             "*This helps with preventing illegitimate accounts from joining our server*"
             ).set_footer(text="Hint: There are no zeroes in the images"),
             view=VerificationView(bot=self.bot)
