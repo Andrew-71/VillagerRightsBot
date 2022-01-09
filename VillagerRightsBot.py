@@ -15,6 +15,7 @@ class VillagerRightsBot(commands.Bot):
         self.config = config
         super().__init__(command_prefix="!", intents=nextcord.Intents.all())
         self.current_players: list[tuple[str, int]] = []
+        self.persistent_views_added: bool = False
 
     def load_ids(self):
         global villager_rights
@@ -22,29 +23,13 @@ class VillagerRightsBot(commands.Bot):
         villager_rights = self.get_guild(self.config["IDS"]["GUILD"])
         verification_channel = villager_rights.get_channel(self.config["IDS"]["VERIFICATION_CHANNEL"])
 
-    async def check_verification_channel(self):
-
-        history = await verification_channel.history().flatten()
-        embed = nextcord.Embed(
-                        title="Welcome!",
-                        description="Welcome to the official Villager Rights Discord server!\n"
-                                    "Please verify yourself by **clicking the button below** and answering the"
-                                    " random captcha using **/answer {solution}**\n"
-                                    "*This helps with preventing illegitimate accounts from joining our server*"
-                    ).set_footer(text="Hint: There are no zeroes in the images")
-        view = VerificationView(bot=self)
-        for message in history:
-            if message.author == self.user:
-                await message.edit(embed=embed, view=view)
-                break
-        else:
-            await verification_channel.send(embed=embed, view=view)
-
     async def on_ready(self):
         print(nextcord.__version__)
         print("ready")
         self.load_ids()
-        await self.check_verification_channel()
+        if not self.persistent_views_added:
+            self.add_view(VerificationView(bot=self))
+            self.persistent_views_added = True
         await self.change_presence(
             activity=nextcord.Game(name="Use /whitelist add  to join the Java Server!"),
             status=nextcord.Status.online
