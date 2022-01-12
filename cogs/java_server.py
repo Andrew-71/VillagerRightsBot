@@ -6,50 +6,14 @@ import nextcord
 from nextcord.ext import tasks, commands
 from pathlib import Path
 from toml import load
-from typing import Union
+from typing import Union, MutableMapping, Any
 from utils.common_embeds import make_error_embed
 from utils.java_stats_utils import make_status_embed, update_stats, update_whitelist
 from utils.json_handling import write_to_json
 
 
-CONFIG: dict = load(Path('configs/config.toml'))
+CONFIG: MutableMapping[str, Any] = load(Path('configs/config.toml'))
 JAVA_SERVER: MinecraftServer = MinecraftServer.lookup(f"{CONFIG['HOSTNAME']}:{CONFIG['QUERY_PORT']}")
-
-
-@tasks.loop(seconds=15.0)
-async def check_java(status_channel: nextcord.TextChannel):
-
-    try:
-        query_response = JAVA_SERVER.query()
-        player_names = query_response.players.names
-    except ConnectionResetError:
-        status_embed = nextcord.Embed(
-            title="Server is Offline",
-            colour=nextcord.Colour.red()
-        )
-    else:
-        status_embed = make_status_embed(players=player_names)
-        await update_whitelist(players=player_names)
-        update_stats(players=player_names)
-        write_to_json(w.WHITELIST_DICT, "data/stats.json")
-        status_embed.colour = nextcord.Colour.blue()
-
-    # Since we often edit the message, this helps players know the relevance of info
-    status_embed.timestamp = datetime.now()
-    try:
-        # Try to edit old message. If there isn't one, send new message.
-        history = await status_channel.history().flatten()
-        if history:
-            await history[0].edit(embed=status_embed)
-        else:
-            await status_channel.send(embed=status_embed)
-    except nextcord.DiscordException:
-        pass
-
-
-@check_java.after_loop
-async def on_check_java_cancel():
-    check_java.start()
 
 
 class JavaServerStats(commands.Cog):
@@ -131,7 +95,42 @@ class JavaServerStats(commands.Cog):
 
         await interaction.response.send_message(embed=leaderboard_embed, ephemeral=True)  # Send the leaderboard
 
+    @tasks.loop(seconds=15.0)
+    async def check_java(self, status_channel: nextcord.TextChannel):
+
+        try:
+            query_response = JAVA_SERVER.query()
+            player_names = query_response.players.names
+        except ConnectionResetError:
+            status_embed = nextcord.Embed(
+                title="Server is Offline",
+                colour=nextcord.Colour.red()
+            )
+        else:
+            status_embed = make_status_embed(players=player_names)
+            await update_whitelist(players=player_names)
+            update_stats(players=player_names)
+            write_to_json(w.WHITELIST_DICT, "data/stats.json")
+            status_embed.colour = nextcord.Colour.blue()
+
+        # Since we often edit the message, this helps players know the relevance of info
+        status_embed.timestamp = datetime.now()
+        try:
+            # Try to edit old message. If there isn't one, send new message.
+            history = await status_channel.history().flatten()
+            if history:
+                await history[0].edit(embed=status_embed)
+            else:
+                await status_channel.send(embed=status_embed)
+        except nextcord.DiscordException:
+            pass
+
+    @check_java.after_loop
+    async def on_check_java_cancel(self):
+        status_channel = self.bot.get_channel(CONFIG["IDS"]["STATUS_CHANNEL"])
+        self.check_java.start(status_channel)
+
     @commands.Cog.listener()
     async def on_ready(self):
         status_channel = self.bot.get_channel(CONFIG["IDS"]["STATUS_CHANNEL"])
-        check_java.start(status_channel)
+        self.check_java.start(status_channel)
