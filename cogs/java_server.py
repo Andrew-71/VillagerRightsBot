@@ -36,13 +36,15 @@ async def check_java(status_channel: nextcord.TextChannel):
 
     # Since we often edit the message, this helps players know the relevance of info
     status_embed.timestamp = datetime.now()
-
-    # Try to edit old message. If there isn't one, send new message.
-    history = await status_channel.history().flatten()
-    if history:
-        await history[0].edit(embed=status_embed)
-    else:
-        await status_channel.send(embed=status_embed)
+    try:
+        # Try to edit old message. If there isn't one, send new message.
+        history = await status_channel.history().flatten()
+        if history:
+            await history[0].edit(embed=status_embed)
+        else:
+            await status_channel.send(embed=status_embed)
+    except nextcord.DiscordException:
+        pass
 
 
 class JavaServerStats(commands.Cog):
