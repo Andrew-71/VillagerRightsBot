@@ -47,6 +47,11 @@ async def check_java(status_channel: nextcord.TextChannel):
         pass
 
 
+@check_java.after_loop
+async def on_check_java_cancel():
+    check_java.start()
+
+
 class JavaServerStats(commands.Cog):
 
     def __init__(self, bot):
