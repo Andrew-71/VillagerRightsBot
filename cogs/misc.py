@@ -20,8 +20,6 @@ class DeclarationURL(nextcord.ui.View):
 class Miscellaneous(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.activist_role: Optional[nextcord.Role] = None
-        self.java_role: Optional[nextcord.Role] = None
 
     @nextcord.slash_command(
         name="declaration",
