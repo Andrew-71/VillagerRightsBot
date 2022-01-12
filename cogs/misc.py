@@ -27,6 +27,7 @@ class Miscellaneous(commands.Cog):
     async def on_ready(self):
         villager_rights: nextcord.Guild = self.bot.get_guild(CONFIG["IDS"]["GUILD"])
         self.colour_role = villager_rights.get_role(CONFIG["IDS"]["COLOUR_ROLE"])
+        self.update_colour_role.start()
 
     @nextcord.slash_command(
         name="declaration",
