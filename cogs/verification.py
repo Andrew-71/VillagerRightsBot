@@ -52,15 +52,17 @@ class VerificationView(nextcord.ui.View):
             with open(file, "rb") as image:
                 fp = nextcord.File(image)  # type: ignore
                 ch: nextcord.TextChannel = self.bot.get_channel(MOD_LOG_ID)
-                msg = await ch.send(content=f"{interaction.user.mention} "
-                                            f"received the captcha below with solution: {solution}",
-                                    file=fp
-                                    )
+                msg = await ch.send(
+                    content=f"{interaction.user.mention} "
+                            f"received the captcha below with solution: {solution}",
+                    file=fp
+                )
                 await sleep(1)
                 await interaction.response.send_message(
                     embed=nextcord.Embed().set_image(url=msg.attachments[0].url)
                                           .set_footer(text="Use /answer to verify"),
-                    ephemeral=True)
+                    ephemeral=True
+                )
 
         conversation = VerificationConversation(interaction.user, solution)
         conversations.append(conversation)
