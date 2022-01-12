@@ -57,8 +57,10 @@ class VerificationView(nextcord.ui.View):
                                     file=fp
                                     )
                 await sleep(1)
-                await interaction.response.send_message(embed=nextcord.Embed().set_image(url=msg.attachments[0].url),
-                                                        ephemeral=True)
+                await interaction.response.send_message(
+                    embed=nextcord.Embed().set_image(url=msg.attachments[0].url)
+                                          .set_footer(text="Use /answer to verify"),
+                    ephemeral=True)
 
         conversation = VerificationConversation(interaction.user, solution)
         conversations.append(conversation)
