@@ -37,3 +37,7 @@ TCP_PORT=6969
     # ID for the mod log channel
     # Default: 712488537932431392
     MOD_LOG=712488537932431392
+
+    # ID for the colour role
+    # Default: 812559182267547668
+    COLOUR_ROLE=812559182267547668
