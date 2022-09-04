@@ -2,6 +2,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { token } = require('./data/config.json');
+const {makeStartButton} = require("./utils/captcha_utils");
+const {process_btn} = require("./utils/button_interactions");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
@@ -23,6 +25,8 @@ client.once('ready', () => {
     client.commands.forEach(command => {
         console.log(`- ${command.data.name}`);
     })
+
+    client.user.setActivity('Team Fortress 3');
 });
 
 client.on('interactionCreate', async interaction => {
@@ -43,7 +47,9 @@ client.on('interactionCreate', async interaction => {
 
 client.on('interactionCreate', async interaction => {
     if (!interaction.isButton()) return;
-    await interaction.reply(`${interaction.customId} was pressed`);
+    console.log(`Received button ${interaction.customId} from ${interaction.user.tag} (${interaction.user.id})`);
+
+    await process_btn(interaction)
 })
 
 client.login(token).then(r =>

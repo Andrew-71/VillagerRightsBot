@@ -1,7 +1,9 @@
 let svgCaptcha = require('svg-captcha');
-const {ButtonBuilder, ButtonStyle} = require("discord.js");
+const {ButtonBuilder, ButtonStyle, ActionRowBuilder} = require("discord.js");
 const fs = require("fs");
 const path = require("path");
+svgCaptcha.loadFont(path.resolve(__dirname, '../data/OpenSans-VariableFont.ttf'))
+
 
 function svgToPng(svg, filename)
 {
@@ -44,8 +46,6 @@ function makeId(length) {
 
 function makeActionRow(correct_answer)
 {
-    const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-
     let buttons = [
         new ButtonBuilder()
             .setCustomId('correct_' + makeId(20))
@@ -53,12 +53,16 @@ function makeActionRow(correct_answer)
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId('incorrect_' + makeId(20))
-            .setLabel('Option 2')
+            .setLabel(makeId(6))
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId('incorrect_' + makeId(20))
-            .setLabel('Option 3')
-            .setStyle(ButtonStyle.Secondary)
+            .setLabel(makeId(6))
+            .setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder()
+            .setCustomId('incorrect_' + makeId(20))
+            .setLabel(makeId(6))
+            .setStyle(ButtonStyle.Secondary),
     ]
     // Shuffle the buttons
     for (let i = buttons.length - 1; i > 0; i--) {
@@ -70,7 +74,25 @@ function makeActionRow(correct_answer)
         .addComponents(buttons);
 }
 
+function makeStartButton(msg)
+{
+    return new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('captcha_start')
+                .setLabel(msg)
+                .setStyle(ButtonStyle.Success))
+}
+
+function verify(id)
+{
+    return id.startsWith('correct_');
+}
+
 module.exports = {
     generateCaptcha: generateCaptcha,
-    makeActionRow: makeActionRow
+    makeActionRow: makeActionRow,
+    makeId: makeId,
+    verify: verify,
+    makeStartButton: makeStartButton
 }
