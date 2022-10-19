@@ -1,10 +1,9 @@
 let svgCaptcha = require('svg-captcha');
 const {ButtonBuilder, ButtonStyle, ActionRowBuilder} = require("discord.js");
-const fs = require("fs");
 const path = require("path");
 svgCaptcha.loadFont(path.resolve(__dirname, '../data/OpenSans-VariableFont.ttf'))
 
-
+// Convert SVG captcha to a PNG for display in the embed
 function svgToPng(svg, filename)
 {
     const svg2img = require('svg2img');
@@ -16,6 +15,7 @@ function svgToPng(svg, filename)
     });
 }
 
+// Generate a captcha image. Returns answer and saves file to data/captcha_image.png
 function generateCaptcha()
 {
     let captcha = svgCaptcha.create({size: 6,
@@ -28,22 +28,24 @@ function generateCaptcha()
     // Save to file
     let filename = '../data/captcha_image.png';
     svgToPng(captcha.data, filename);
-    console.log(captcha.text);
 
     return captcha.text; // return the answer
 }
 
+// Create unique ID for the captcha buttons to ensure they are unique (Doesn't affect anything, still good idea)
 function makeId(length) {
     let result = '';
     let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let charactersLength = characters.length;
-    for (var i = 0; i < length; i++)
+    for (let i = 0; i < length; i++)
     {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
 }
 
+// Create a button row for captcha.
+// Returns action tow with 4 buttons. One has correct answer, others fake one. All buttons are in random order.
 function makeActionRow(correct_answer)
 {
     let buttons = [
@@ -64,6 +66,7 @@ function makeActionRow(correct_answer)
             .setLabel(makeId(6))
             .setStyle(ButtonStyle.Secondary),
     ]
+
     // Shuffle the buttons
     for (let i = buttons.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -74,6 +77,7 @@ function makeActionRow(correct_answer)
         .addComponents(buttons);
 }
 
+// Create a button to start the captcha
 function makeStartButton(msg)
 {
     return new ActionRowBuilder()
@@ -84,15 +88,8 @@ function makeStartButton(msg)
                 .setStyle(ButtonStyle.Success))
 }
 
-function verify(id)
-{
-    return id.startsWith('correct_');
-}
-
 module.exports = {
     generateCaptcha: generateCaptcha,
     makeActionRow: makeActionRow,
-    makeId: makeId,
-    verify: verify,
     makeStartButton: makeStartButton
 }

@@ -1,6 +1,8 @@
 ## Discord bot for the VillagerRights community
+This bot aims to protect the community from spam via captcha, 
+and give users access to their statistics while playing on the minecraft server.
 
-### Work in progress.
+**note: Minecraft statistics are not yet implemented**
 
 #### Written using:
 * Node.js

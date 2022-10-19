@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, Embed, Colors } = require('discord.js');
 
+// This is a legacy command that returns declaration of villager rights.
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('declaration')

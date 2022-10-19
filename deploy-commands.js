@@ -1,3 +1,6 @@
+// This script registers all the commands for the bot in Discord.
+// Since their command system is extremely strange.
+
 const fs = require('node:fs');
 const path = require('node:path');
 const { REST } = require('@discordjs/rest');
