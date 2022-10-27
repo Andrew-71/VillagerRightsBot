@@ -18,7 +18,7 @@ module.exports = {
     // Command for initial captcha message
     data: new SlashCommandBuilder()
         .setName('captcha_initial')
-        .setDescription('Initial captcha message')
+        .setDescription('Initial captcha message (moderator only)')
         .addStringOption(option =>
             option.setName('verification_channel')
                 .setDescription('Where to put the message')
