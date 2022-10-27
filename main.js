@@ -51,6 +51,24 @@ client.on('interactionCreate', async interaction => {
     await process_btn(interaction)
 })
 
+// This is a basic prototype of the manager for some commands.
+// These will be "old-style" so that they don't appear in the slash command list.
+// because they are not meant to be used by users.
+// only by the bot master.
+client.on('messageCreate', message => {
+    if (message.content.startsWith('!!message')) {
+        let { bot_master_role } = require('data/config.json').ids;
+        let member_roles = message.member.roles;
+        if (!(member_roles.cache.has(bot_master_role)))
+        {
+            return // dont even notify the user because they could use this to spam
+        }
+        // delete the message and send content
+        message.delete()
+        message.channel.send(message.content.slice(9))
+    }
+})
+
 // Login
 client.login(token).then(r =>
     console.log('Logged in as ' + client.user.tag))
