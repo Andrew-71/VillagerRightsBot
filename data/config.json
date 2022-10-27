@@ -1,0 +1,15 @@
+{
+  "token": "",
+  "server_hostname": "",
+  "query_port": "",
+  "ids": {
+    "guild": "",
+    "activist_role": "",
+    "java_role": "",
+    "status_channel": "",
+    "verification_channel": "",
+    "log_channel": "",
+    "colour_role": "",
+    "bot_master_role": ""
+  }
+}
