@@ -1,4 +1,5 @@
 const { EmbedBuilder, Colors } = require('discord.js')
+const { bot_master } = require('data/config.json').ids
 
 // Embeds for captcha interactions - Main, Incorrect, Correct, and Initial
 module.exports = {
@@ -27,5 +28,9 @@ module.exports = {
             name: 'Instructions',
             value: 'Click the button below to start the captcha. ' +
                    'Then, click the button that corresponds to the text in the image.',
-            inline: false}])
+            inline: false},
+            {
+                name: 'Note',
+                value: `If the bot is offline or not working, please message <@!${bot_master}> for manual verification.`,
+            }])
 }

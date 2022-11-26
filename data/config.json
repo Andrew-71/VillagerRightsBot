@@ -10,6 +10,7 @@
     "verification_channel": "",
     "log_channel": "",
     "colour_role": "",
-    "bot_master_role": ""
+    "bot_master_role": "",
+    "bot_master": ""
   }
 }
