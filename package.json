@@ -1,0 +1,20 @@
+{
+  "name": "villagerrightsbot",
+  "version": "1.0.0",
+  "description": "Discord bot for the Villager Rights community",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.andrey71.ru/Andrew71/VillagerRightsBot.git"
+  },
+  "author": "Andrew_7_1",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.6.0",
+    "svg-captcha": "^1.4.0",
+    "svg2img": "^1.0.0-beta.2"
+  }
+}

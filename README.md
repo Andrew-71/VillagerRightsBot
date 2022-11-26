@@ -7,4 +7,4 @@ and give users access to their statistics while playing on the minecraft server.
 #### Written using:
 * Node.js
 * Discord.js
-* svg-captcha and save2img
+* svg-captcha and svg2img
